@@ -1,0 +1,54 @@
+<script>
+  $(function(){
+    google.script.run
+      .withSuccessHandler(id => $('#user-mail').text(id))
+      .getUserId()
+    
+    google.script.run
+      .withSuccessHandler(subjectList => insertOptionDom('subject-select', subjectList))
+      .getSubjectList()
+
+    google.script.run
+      .withSuccessHandler(classList => insertOptionDom('class-select', classList))
+      .getClassList()
+  })
+
+  $('#subject-select').change(function(){
+    const subject = $(this).val();
+    google.script.run
+      .withSuccessHandler(teacherList => {
+        console.log(teacherList);
+        const subjectTeacherList = teacherList.filter(obj => obj.subject === subject);
+        const subjectTeacherNameList = subjectTeacherList.map(obj => obj.name);
+        console.log(subjectTeacherNameList);
+        insertOptionDom('teacher-select', subjectTeacherNameList);
+      })
+      .getTeacherList()
+  });
+
+  function insertOptionDom (targetId, dataList) {
+    $(`#${targetId}`).append(
+      dataList.map(data => `<option>${data}</option>`)
+    )
+  }
+
+  $('#button-submit').on('click', function(){
+    console.log('test code')
+    const mail = $('#user-mail').text();
+    const subject = $('#subject-select').val();
+    const teacher = $('#teacher-select').val();
+    const good = $('#commnet-good').val();
+    const improved = $('#comment-improved').val();
+    const obj = {
+      mail: mail,
+      subject: subject,
+      teacher: teacher,
+      good: good,
+      improved: improved
+    }
+    google.script.run
+      .withSuccessHandler(console.log('done'))
+      .insertToSpreadSheet(obj)
+    return false;
+  })
+</script>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>授業見学コメントフォーム</h1>
+    </header>
+    <main>
+      <div id='user-mail'>
+      </div>
+      <form>
+        <div id='subject-select-wrapper'>
+          <label>教科を選択して下さい
+            <select id='subject-select'>
+              <option disabled>教科を選択</option>
+            </select>
+          </label>
+        </div>
+        <div id='teacher-select-wrapper'>
+          <div id='message-rearch-teacher' class='message-search'>授業者を選択しています...</div>
+          <label>授業者を選択して下さい
+            <select id='teacher-select'>
+              <option disabled>授業者を選択</option>
+            </select>
+          </label>
+        </div>
+        <div id='class-select-wrapper'>
+          <label>クラスを選択して下さい
+            <select id='class-select'>
+              <option disabled>クラスを選択</option>
+            </select>
+        </div>
+        <label>良かった点を入力して下さい
+          <div id='comment-good-wrapper'>
+            <input type='text' id='comment-good'>
+          </div>
+        </label>
+        <label>改善点を入力して下さい
+          <div id='comment-improved'>
+            <input type='text' id='comment-improved'>
+          </div>
+        </label>
+        <button id='submit-button'>送信</button>
+      </form>
+    </main>
+    <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>
+  </body>
+</html>
