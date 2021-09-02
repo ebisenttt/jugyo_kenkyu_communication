@@ -2,48 +2,65 @@
 <html>
   <head>
     <base target="_top">
+    <?!=HtmlService.createHtmlOutputFromFile('css').getContent();?>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   </head>
   <body>
     <header>
-      <h1>授業見学コメントフォーム</h1>
+      <h1 class='title'>授業見学コメントフォーム</h1>
     </header>
     <main>
       <div id='user-mail'>
+        IDを取得中...
       </div>
       <form>
-        <div id='subject-select-wrapper'>
-          <label>教科を選択して下さい
-            <select id='subject-select'>
-              <option disabled>教科を選択</option>
-            </select>
-          </label>
+        <div id='subject-select-wrapper' class='field'>
+          <label class='label'>教科を選択して下さい</label>
+            <div class='control'>
+              <div class='select'> 
+                <select id='subject-select'>
+                  <option hidden>教科を選択</option>
+                </select>
+              </div>
+            </div>
         </div>
-        <div id='teacher-select-wrapper'>
-          <div id='message-rearch-teacher' class='message-search'>授業者を選択しています...</div>
-          <label>授業者を選択して下さい
-            <select id='teacher-select'>
-              <option disabled>授業者を選択</option>
-            </select>
-          </label>
-        </div>
-        <div id='homeroom-select-wrapper'>
-          <label>クラスを選択して下さい
-            <select id='homeroom-select'>
-              <option disabled>クラスを選択</option>
-            </select>
-        </div>
-        <label>良かった点を入力して下さい
-          <div id='comment-good-wrapper'>
-            <input type='text' id='comment-good'>
+        <div id='teacher-select-wrapper' class='field'>
+          <div id='message-search-teacher' class='message-search'>
+            <p>教科の授業者を検索しています...</p>
+            <progress></progress>
           </div>
-        </label>
-        <label>改善点を入力して下さい
-          <div id='comment-improved-wrapper'>
-            <input type='text' id='comment-improved'>
+          <label class='label'>授業者を選択して下さい</label>
+            <div class='control'>
+              <div class='select'>
+                <select id='teacher-select' disabled>
+                  <option hidden>授業者を選択</option>
+                </select>
+              </div>
+            </div>
+        </div>
+        <div id='homeroom-select-wrapper' class='field'>
+          <label class='label'>クラスを選択して下さい</label>
+          <div class='control'>
+            <div class='select'>
+              <select id='homeroom-select' disabled>
+                <option hidden>クラスを選択</option>
+              </select>
+            </div>
           </div>
-        </label>
-        <button type='button' id='button-submit'>送信</button>
+        </div>
+        <div id='comment-good-wrapper' class='field'>
+          <label class="label">良かった点を入力して下さい</label>
+          <div class='control'>
+            <textarea type='textarea' id='comment-good' class='textarea' disabled></textarea>
+          </div>
+        </div>
+        <div id='comment-improved-wrapper' class='field'>
+          <label class='label'>改善点を入力して下さい</label>
+          <div class='control'>
+            <textarea type='textarea' id='combment-improved' class='textarea' disabled></textarea>
+          </div>
+        </div>
+        <button type='button' id='button-submit' class='button is-primary' disabled>送信</button>
       </form>
     </main>
     <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>

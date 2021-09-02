@@ -54,3 +54,11 @@ function insertToSpreadSheet(obj) {
   
 }
 
+function sendMail (teacherName) {
+  const teacherList = getTeacherList();
+  const teacherObjList = teacherList.filter(obj => obj.name === teacherName);
+  if(teacherObjList.length !== 1) throw Error();
+  const mail = teacherObjList[0].mail;
+  console.log(teacherObj, mail);
+}
+
