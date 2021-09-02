@@ -27,9 +27,9 @@
             </select>
           </label>
         </div>
-        <div id='class-select-wrapper'>
+        <div id='homeroom-select-wrapper'>
           <label>クラスを選択して下さい
-            <select id='class-select'>
+            <select id='homeroom-select'>
               <option disabled>クラスを選択</option>
             </select>
         </div>
@@ -39,11 +39,11 @@
           </div>
         </label>
         <label>改善点を入力して下さい
-          <div id='comment-improved'>
+          <div id='comment-improved-wrapper'>
             <input type='text' id='comment-improved'>
           </div>
         </label>
-        <button id='submit-button'>送信</button>
+        <button type='button' id='button-submit'>送信</button>
       </form>
     </main>
     <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>

@@ -29,22 +29,23 @@ function getTeacherList() {
   return teacherObjList;
 }
 
-function getClassList() {
-  const sheet = ss.getSheetByName('class');
+function getHomeroomList() {
+  const sheet = ss.getSheetByName('homeroom');
   const classList = sheet.getDataRange().getValues();
   classList.shift();
   return classList;
 }
 
 function insertToSpreadSheet(obj) {
+  console.log('insertToSpreadSheet');
   const sheet = ss.getSheetByName('comment');
   const timeStamp = new Date();
   const array = [
     timeStamp,
     obj.mail,
-    クラス,
     obj.subject,
     obj.teacher,
+    obj.homeroom,
     obj.good,
     obj.improved
   ];

@@ -9,8 +9,8 @@
       .getSubjectList()
 
     google.script.run
-      .withSuccessHandler(classList => insertOptionDom('class-select', classList))
-      .getClassList()
+      .withSuccessHandler(classList => insertOptionDom('homeroom-select', classList))
+      .getHomeroomList()
   })
 
   $('#subject-select').change(function(){
@@ -34,20 +34,17 @@
 
   $('#button-submit').on('click', function(){
     console.log('test code')
-    const mail = $('#user-mail').text();
-    const subject = $('#subject-select').val();
-    const teacher = $('#teacher-select').val();
-    const good = $('#commnet-good').val();
-    const improved = $('#comment-improved').val();
     const obj = {
-      mail: mail,
-      subject: subject,
-      teacher: teacher,
-      good: good,
-      improved: improved
+      mail : $('#user-mail').text(),
+      subject : $('#subject-select').val(),
+      teacher : $('#teacher-select').val(),
+      homeroom : $('#homeroom-select').val(),
+      good : $('#comment-good').val(),
+      improved : $('#comment-improved').val(),
     }
     google.script.run
-      .withSuccessHandler(console.log('done'))
+      .withSuccessHandler(console.log('success'))
+      .withFailureHandler(e => console.log(e))
       .insertToSpreadSheet(obj)
     return false;
   })
