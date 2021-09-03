@@ -27,7 +27,11 @@
         insertOptionDom('teacher-select', subjectTeacherNameList);
       })
       .getTeacherList()
-    $('#teacher-select').prop('disabled', true);
+    $('#teacher-select').prop('disabled', false);
+    $('#homeroom-select').prop('disabled', false);
+    $('#comment-good').prop('disabled', false);
+    $('#comment-improved').prop('disabled', false);
+    $('#button-submit').prop('disabled', false);
   });
 
   function insertOptionDom (targetId, dataList) {
@@ -47,13 +51,18 @@
       good : $('#comment-good').val(),
       improved : $('#comment-improved').val(),
     }
+    console.log(obj);
+
+    
     google.script.run
       .withSuccessHandler(console.log('success'))
       .withFailureHandler(e => console.log(e))
       .insertToSpreadSheet(obj)
     
-    google.script.run
-      .withSuccessHandler()
-      .sendMail(teacherName)
+    // google.script.run
+    //   .withSuccessHandler()
+    //   .sendMail(teacherName)
+  
+    return false;
   })
 </script>

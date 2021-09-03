@@ -18,8 +18,8 @@
           <label class='label'>教科を選択して下さい</label>
             <div class='control'>
               <div class='select'> 
-                <select id='subject-select'>
-                  <option hidden>教科を選択</option>
+                <select id='subject-select' required>
+                  <option disabled selected>教科を選択</option>
                 </select>
               </div>
             </div>
@@ -32,8 +32,8 @@
           <label class='label'>授業者を選択して下さい</label>
             <div class='control'>
               <div class='select'>
-                <select id='teacher-select' disabled>
-                  <option hidden>授業者を選択</option>
+                <select id='teacher-select' disabled required>
+                  <option selected></option>
                 </select>
               </div>
             </div>
@@ -42,8 +42,8 @@
           <label class='label'>クラスを選択して下さい</label>
           <div class='control'>
             <div class='select'>
-              <select id='homeroom-select' disabled>
-                <option hidden>クラスを選択</option>
+              <select id='homeroom-select' disabled required>
+                <option selected></option>
               </select>
             </div>
           </div>
@@ -51,16 +51,16 @@
         <div id='comment-good-wrapper' class='field'>
           <label class="label">良かった点を入力して下さい</label>
           <div class='control'>
-            <textarea type='textarea' id='comment-good' class='textarea' disabled></textarea>
+            <textarea type='textarea' id='comment-good' class='textarea' disabled required></textarea>
           </div>
         </div>
         <div id='comment-improved-wrapper' class='field'>
           <label class='label'>改善点を入力して下さい</label>
           <div class='control'>
-            <textarea type='textarea' id='combment-improved' class='textarea' disabled></textarea>
+            <textarea type='textarea' id='comment-improved' class='textarea' disabled required></textarea>
           </div>
         </div>
-        <button type='button' id='button-submit' class='button is-primary' disabled>送信</button>
+        <button type='button submit' id='button-submit' class='button is-primary' disabled>送信</button>
       </form>
     </main>
     <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>
