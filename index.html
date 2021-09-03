@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!=HtmlService.createHtmlOutputFromFile('css').getContent();?>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1 class='title'>授業見学コメントフォーム</h1>
+    </header>
+    <main>
+      <div id='user-mail'>
+        IDを取得中...
+      </div>
+      <form>
+        <div id='subject-select-wrapper' class='field'>
+          <label class='label'>教科</label>
+            <div class='control'>
+              <div class='select'> 
+                <select id='subject-select' required>
+                  <option selected value=""></option>
+                </select>
+              </div>
+            </div>
+        </div>
+        <div id='teacher-select-wrapper' class='field'>
+          <div id='message-search-teacher' class='message-search'>
+            <progress class='progress is-success'></progress>
+          </div>
+          <label class='label'>授業者</label>
+            <div class='control'>
+              <div class='select'>
+                <select id='teacher-select' disabled required>
+                  <option selected value=""></option>
+                </select>
+              </div>
+            </div>
+          <p class='help is-danger' id='error-teacher-select'>授業者が選択されていません</p>
+        </div>
+        <div id='homeroom-select-wrapper' class='field'>
+          <label class='label'>クラス</label>
+          <div class='control'>
+            <div class='select'>
+              <select id='homeroom-select' disabled required>
+                <option selected value=""></option>
+              </select>
+            </div>
+          </div>
+          <p class='help is-danger' id='error-homeroom-select'>クラスが選択されていません</p>
+        </div>
+        <div id='comment-good-wrapper' class='field'>
+          <label class="label">良かった点</label>
+          <div class='control'>
+            <textarea type='textarea' id='comment-good' class='textarea' disabled required></textarea>
+          </div>
+          <p class='help is-danger' id='error-comment-good'>良かった点が入力されていません</p>
+        </div>
+        <div id='comment-improved-wrapper' class='field'>
+          <label class='label'>改善点</label>
+          <div class='control'>
+            <textarea type='textarea' id='comment-improved' class='textarea' disabled required></textarea>
+          </div>
+          <p class='help is-danger' id='error-comment-improved'>改善点が入力されていません</p>
+        </div>
+        <button type='button submit' id='button-submit' class='button is-primary' disabled>送信</button>
+      </form>
+    </main>
+    <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>
+  </body>
+</html>

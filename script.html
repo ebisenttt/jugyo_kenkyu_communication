@@ -1,0 +1,101 @@
+<script>
+  $(function(){
+    google.script.run
+      .withSuccessHandler(id => $('#user-mail').text(id))
+      .getUserId()
+    
+    google.script.run
+      .withSuccessHandler(subjectList => insertOptionDom('subject-select', subjectList))
+      .getSubjectList()
+
+    google.script.run
+      .withSuccessHandler(classList => insertOptionDom('homeroom-select', classList))
+      .getHomeroomList()
+  })
+
+  $('#subject-select').change(function(){
+    const subject = $(this).val();
+    const messageSearchTeacher = $('#message-search-teacher');
+    messageSearchTeacher.css('visibility', 'visible');
+    google.script.run
+      .withSuccessHandler(teacherList => {
+        console.log(teacherList);
+        const subjectTeacherList = teacherList.filter(obj => obj.subject === subject);
+        const subjectTeacherNameList = subjectTeacherList.map(obj => obj.name);
+        console.log(subjectTeacherNameList);
+        messageSearchTeacher.css('visibility', 'hidden');
+        insertOptionDom('teacher-select', subjectTeacherNameList);
+      })
+      .getTeacherList()
+    $('#teacher-select').prop('disabled', false);
+    $('#homeroom-select').prop('disabled', false);
+    $('#comment-good').prop('disabled', false);
+    $('#comment-improved').prop('disabled', false);
+    $('#button-submit').prop('disabled', false);
+  });
+
+  function insertOptionDom (targetId, dataList) {
+    const target = $(`#${targetId}`);
+    target.empty();
+    target.append('<option value="" selected></option>');
+    target.append(dataList.map(data => `<option>${data}</option>`));
+  }
+
+  $('#button-submit').on('click', function(){
+    const teacherName = $('#teacher-select').val();
+    const inputList = $('select, textarea').map(function(index, element){;
+      const obj = {id: element.id, value: element.value};
+      return obj;
+    }).get();
+
+    console.log(inputList);
+
+    inputValidation(inputList);
+
+    const obj = {
+      mail : $('#user-mail').text(),
+      subject : $('#subject-select').val(),
+      teacher : teacherName,
+      homeroom : $('#homeroom-select').val(),
+      good : $('#comment-good').val(),
+      improved : $('#comment-improved').val(),
+    }
+    console.log(obj);
+    
+    google.script.run
+      .withSuccessHandler(console.log('succeed to insertToSpreadSheet'))
+      .withFailureHandler(e => console.log(e))
+      .insertToSpreadSheet(obj)
+    
+    google.script.run
+      .withSuccessHandler(console.log('succeed to sendMail'))
+      .sendMail(teacherName)
+  
+    return false;
+  })
+
+  function inputValidation(list) {
+    if(list.some(obj => obj.value === "")){
+      list.forEach(obj => {
+        if(obj.value === "")showError(obj.id);
+        else hideError(`${obj.id}`);
+      });
+      return false;
+    } else {
+      list.forEach(obj => hideError(obj.id));
+      return true;
+    }
+  }
+
+  function showError(targetId) {
+    $(`#error-${targetId}`).css('visibility', 'visible');
+    $(`#${targetId}`).addClass('is-danger');
+    $(`#${targetId}`).parent().addClass('is-danger');
+  }
+
+  function hideError(targetId) {
+    $(`#error-${targetId}`).css('visibility', 'hidden');
+    $(`#${targetId}`).removeClass('is-danger');
+    $(`#${targetId}`).parent().removeClass('is-danger');
+  }
+</script>
