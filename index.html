@@ -15,50 +15,53 @@
       </div>
       <form>
         <div id='subject-select-wrapper' class='field'>
-          <label class='label'>教科を選択して下さい</label>
+          <label class='label'>教科</label>
             <div class='control'>
               <div class='select'> 
                 <select id='subject-select' required>
-                  <option disabled selected>教科を選択</option>
+                  <option selected value=""></option>
                 </select>
               </div>
             </div>
         </div>
         <div id='teacher-select-wrapper' class='field'>
           <div id='message-search-teacher' class='message-search'>
-            <p>教科の授業者を検索しています...</p>
-            <progress></progress>
+            <progress class='progress is-success'></progress>
           </div>
-          <label class='label'>授業者を選択して下さい</label>
+          <label class='label'>授業者</label>
             <div class='control'>
               <div class='select'>
                 <select id='teacher-select' disabled required>
-                  <option selected></option>
+                  <option selected value=""></option>
                 </select>
               </div>
             </div>
+          <p class='help is-danger' id='error-teacher-select'>授業者が選択されていません</p>
         </div>
         <div id='homeroom-select-wrapper' class='field'>
-          <label class='label'>クラスを選択して下さい</label>
+          <label class='label'>クラス</label>
           <div class='control'>
             <div class='select'>
               <select id='homeroom-select' disabled required>
-                <option selected></option>
+                <option selected value=""></option>
               </select>
             </div>
           </div>
+          <p class='help is-danger' id='error-homeroom-select'>クラスが選択されていません</p>
         </div>
         <div id='comment-good-wrapper' class='field'>
-          <label class="label">良かった点を入力して下さい</label>
+          <label class="label">良かった点</label>
           <div class='control'>
             <textarea type='textarea' id='comment-good' class='textarea' disabled required></textarea>
           </div>
+          <p class='help is-danger' id='error-comment-good'>良かった点が入力されていません</p>
         </div>
         <div id='comment-improved-wrapper' class='field'>
-          <label class='label'>改善点を入力して下さい</label>
+          <label class='label'>改善点</label>
           <div class='control'>
             <textarea type='textarea' id='comment-improved' class='textarea' disabled required></textarea>
           </div>
+          <p class='help is-danger' id='error-comment-improved'>改善点が入力されていません</p>
         </div>
         <button type='button submit' id='button-submit' class='button is-primary' disabled>送信</button>
       </form>

@@ -51,7 +51,6 @@ function insertToSpreadSheet(obj) {
   ];
   console.log(array);
   sheet.appendRow(array);
-  
 }
 
 function sendMail (teacherName) {
@@ -59,6 +58,6 @@ function sendMail (teacherName) {
   const teacherObjList = teacherList.filter(obj => obj.name === teacherName);
   if(teacherObjList.length !== 1) throw Error();
   const mail = teacherObjList[0].mail;
-  console.log(teacherObj, mail);
+  console.log(teacherObjList, mail);
 }
 
