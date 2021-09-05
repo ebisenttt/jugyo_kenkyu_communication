@@ -1,22 +1,42 @@
 <script>
+  // 読み込み時の処理
   $(function(){
+    $('#reading-initial-info').css('visibility', 'visible');
+    // USERIDの読み込み
     google.script.run
-      .withSuccessHandler(id => $('#user-mail').text(id))
+      .withSuccessHandler(id => {
+        $('#user-mail').text(id);
+      })
       .getUserId()
     
+    // 教科名リストの読み込み
     google.script.run
-      .withSuccessHandler(subjectList => insertOptionDom('subject-select', subjectList))
+      .withSuccessHandler(subjectList => {
+        insertOptionDom('subject-select', subjectList);
+        $('#reading-initial-info').css('visibility', 'hidden');
+        $('#subject-select').prop('disabled', false);
+      })
       .getSubjectList()
 
+    // クラス名の読み込み
     google.script.run
       .withSuccessHandler(classList => insertOptionDom('homeroom-select', classList))
       .getHomeroomList()
   })
-
+  
+  // 教科選択時の処理
   $('#subject-select').change(function(){
     const subject = $(this).val();
     const messageSearchTeacher = $('#message-search-teacher');
+    // 読み込みバーの表示
     messageSearchTeacher.css('visibility', 'visible');
+    // 他のINPUTを無効にする
+    $('#teacher-select').prop('disabled', true);
+    $('#homeroom-select').prop('disabled', true);
+    $('#comment-good').prop('disabled', true);
+    $('#comment-improved').prop('disabled', true);
+    $('#button-submit').prop('disabled', true);
+    // 教科リストの取得，挿入
     google.script.run
       .withSuccessHandler(teacherList => {
         console.log(teacherList);
@@ -25,55 +45,87 @@
         console.log(subjectTeacherNameList);
         messageSearchTeacher.css('visibility', 'hidden');
         insertOptionDom('teacher-select', subjectTeacherNameList);
+        // 他のINPUTを有効にする
+        $('#teacher-select').prop('disabled', false);
+        $('#homeroom-select').prop('disabled', false);
+        $('#comment-good').prop('disabled', false);
+        $('#comment-improved').prop('disabled', false);
+        $('#button-next').prop('disabled', false);
       })
       .getTeacherList()
-    $('#teacher-select').prop('disabled', false);
-    $('#homeroom-select').prop('disabled', false);
-    $('#comment-good').prop('disabled', false);
-    $('#comment-improved').prop('disabled', false);
-    $('#button-submit').prop('disabled', false);
   });
 
+  // プルダウンリストの選択肢の挿入の関数
   function insertOptionDom (targetId, dataList) {
     const target = $(`#${targetId}`);
     target.empty();
-    target.append('<option value="" selected></option>');
+    target.append('<option value="" disabled selected></option>');
     target.append(dataList.map(data => `<option>${data}</option>`));
   }
 
-  $('#button-submit').on('click', function(){
-    const teacherName = $('#teacher-select').val();
+　// 次へボタン押下時の処理
+  $('#button-next').on('click', function(){
+    // 読み込みバーの表示
+    $('#reading-modal').css('visibility', 'visible');
+    // INPUTの値の取得
     const inputList = $('select, textarea').map(function(index, element){;
-      const obj = {id: element.id, value: element.value};
+      const obj = {
+        id: element.id,
+        value: element.value,
+        label: $(`#${element.id}-wrapper`).find('label').text()
+      };
       return obj;
     }).get();
 
-    console.log(inputList);
-
-    inputValidation(inputList);
-
-    const obj = {
-      mail : $('#user-mail').text(),
-      subject : $('#subject-select').val(),
-      teacher : teacherName,
-      homeroom : $('#homeroom-select').val(),
-      good : $('#comment-good').val(),
-      improved : $('#comment-improved').val(),
+    // INPUTのValidation
+    if(inputValidation(inputList)){
+      showModal(inputList);
+      $('#reading-modal').css('visibility', 'hidden');
     }
-    console.log(obj);
-    
-    google.script.run
-      .withSuccessHandler(console.log('succeed to insertToSpreadSheet'))
-      .withFailureHandler(e => console.log(e))
-      .insertToSpreadSheet(obj)
-    
-    google.script.run
-      .withSuccessHandler(console.log('succeed to sendMail'))
-      .sendMail(teacherName)
-  
+
     return false;
   })
 
+  // 確認モーダルを非表示にする
+  $('#button-delete-modal-confirm, #button-modal-cancel, #modal-confirm-background').on('click', function(){
+    hideModal();
+  });
+
+  // 提出後のモーダルを非表示にする
+  $('#button-delete-modal-end, #modal-end-background, #button-close-modal-end').on('click', function(){
+    $('#modal-end').removeClass('is-active');
+  })
+
+  // 提出ボタン押下時の処理
+  $('#button-modal-submit').on('click', function(){
+    // 読み込みバーの表示
+    $('#reading-modal-end').css('visibility', 'visible');
+    
+    const obj = {
+        mail : $('#user-mail').text(),
+        subject : $('#subject-select').val(),
+        teacher : $('#teacher-select').val(),
+        homeroom : $('#homeroom-select').val(),
+        good : $('#comment-good').val(),
+        improved : $('#comment-improved').val(),
+    }
+    
+    // SpreadSheetへの挿入
+    google.script.run
+      .withSuccessHandler(() => {
+        // 確認モーダルを非表示
+        hideModal();
+        // 提出後モーダルの表示
+        $('#modal-end').addClass('is-active');
+        console.log('succeed to insertToSpreadSheet');
+      })
+      .withFailureHandler(e => console.log(e))
+      .insertToSpreadSheet(obj)
+
+    sendMailJS(obj);
+  })
+
+  // INPUTのValidation関数
   function inputValidation(list) {
     if(list.some(obj => obj.value === "")){
       list.forEach(obj => {
@@ -87,15 +139,40 @@
     }
   }
 
+  // エラーメッセージの表示
   function showError(targetId) {
     $(`#error-${targetId}`).css('visibility', 'visible');
     $(`#${targetId}`).addClass('is-danger');
     $(`#${targetId}`).parent().addClass('is-danger');
   }
 
+  // エラーメッセージの非表示
   function hideError(targetId) {
     $(`#error-${targetId}`).css('visibility', 'hidden');
     $(`#${targetId}`).removeClass('is-danger');
     $(`#${targetId}`).parent().removeClass('is-danger');
+  }
+
+  // 確認モーダルの表示関数
+  function showModal(inputList) {
+    $('#modal-card-body').empty();
+    inputList.forEach(obj => {
+      $('<p>', {class: 'modal-card-body-title', text: obj.label}).appendTo('#modal-card-body');
+      $('<p>', {class: 'modal-card-body-text', text: obj.value}).appendTo('#modal-card-body');
+    });
+    $('#modal-confirm').addClass('is-active');
+  }
+  
+  // 確認モーダルの非表示関数
+  function hideModal() {
+    console.log('check');
+    $('#modal-confirm').removeClass('is-active');
+  }
+
+  // メールの送信
+  function sendMailJS(obj) {
+    google.script.run
+      .withSuccessHandler(console.log('succeed to sendMail'))
+      .sendMailGAS(obj)
   }
 </script>

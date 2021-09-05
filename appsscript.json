@@ -3,6 +3,11 @@
   "dependencies": {
     "enabledAdvancedServices": [
       {
+        "userSymbol": "Gmail",
+        "version": "v1",
+        "serviceId": "gmail"
+      },
+      {
         "userSymbol": "Sheets",
         "version": "v4",
         "serviceId": "sheets"
@@ -13,6 +18,10 @@
   "runtimeVersion": "V8",
   "webapp": {
     "executeAs": "USER_DEPLOYING",
-    "access": "MYSELF"
-  }
+    "access": "DOMAIN"
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/script.send_mail"
+  ]
 }

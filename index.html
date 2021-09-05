@@ -6,66 +6,104 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   </head>
   <body>
-    <header>
-      <h1 class='title'>授業見学コメントフォーム</h1>
-    </header>
-    <main>
-      <div id='user-mail'>
-        IDを取得中...
-      </div>
-      <form>
-        <div id='subject-select-wrapper' class='field'>
-          <label class='label'>教科</label>
-            <div class='control'>
-              <div class='select'> 
-                <select id='subject-select' required>
-                  <option selected value=""></option>
-                </select>
-              </div>
-            </div>
+    <div class='container'>
+      <header class='header'>
+        <h1 class='title'>不動岡高校授業見学コメントフォーム</h1>
+      </header>
+      <main>
+        <p>授業研究週間用のコメントフォームです。入力した内容は，授業者にメールで送信されます。</p>
+        <div class='field'>
+          <progress class='progress is-success message-search' id='reading-initial-info'></progress>
+          <label class='label'>あなたのメールアドレス</label>
+          <p id='user-mail'>読み込み中...</p>
+          
         </div>
-        <div id='teacher-select-wrapper' class='field'>
-          <div id='message-search-teacher' class='message-search'>
-            <progress class='progress is-success'></progress>
+        <form>
+          <div id='subject-select-wrapper' class='field'>
+            <label class='label'>教科</label>
+              <div class='control'>
+                <div class='select'> 
+                  <select id='subject-select' disabled required>
+                    <option selected value=""></option>
+                  </select>
+                </div>
+              </div>
           </div>
-          <label class='label'>授業者</label>
+          <div id='teacher-select-wrapper' class='field'>
+            <div id='message-search-teacher' class='message-search'>
+              <progress class='progress is-success'></progress>
+            </div>
+            <label class='label'>授業者</label>
+              <div class='control'>
+                <div class='select'>
+                  <select id='teacher-select' disabled required>
+                    <option selected value=""></option>
+                  </select>
+                </div>
+              </div>
+            <p class='help is-danger' id='error-teacher-select'>授業者が選択されていません</p>
+          </div>
+          <div id='homeroom-select-wrapper' class='field'>
+            <label class='label'>クラス</label>
             <div class='control'>
               <div class='select'>
-                <select id='teacher-select' disabled required>
+                <select id='homeroom-select' disabled required>
                   <option selected value=""></option>
                 </select>
               </div>
             </div>
-          <p class='help is-danger' id='error-teacher-select'>授業者が選択されていません</p>
-        </div>
-        <div id='homeroom-select-wrapper' class='field'>
-          <label class='label'>クラス</label>
-          <div class='control'>
-            <div class='select'>
-              <select id='homeroom-select' disabled required>
-                <option selected value=""></option>
-              </select>
+            <p class='help is-danger' id='error-homeroom-select'>クラスが選択されていません</p>
+          </div>
+          <div id='comment-good-wrapper' class='field'>
+            <label class="label">良かった点</label>
+            <div class='control'>
+              <textarea type='textarea' id='comment-good' class='textarea' disabled required></textarea>
             </div>
+            <p class='help is-danger' id='error-comment-good'>良かった点が入力されていません</p>
           </div>
-          <p class='help is-danger' id='error-homeroom-select'>クラスが選択されていません</p>
-        </div>
-        <div id='comment-good-wrapper' class='field'>
-          <label class="label">良かった点</label>
-          <div class='control'>
-            <textarea type='textarea' id='comment-good' class='textarea' disabled required></textarea>
+          <div id='comment-improved-wrapper' class='field'>
+            <label class='label'>改善点</label>
+            <div class='control'>
+              <textarea type='textarea' id='comment-improved' class='textarea' disabled required></textarea>
+            </div>
+            <p class='help is-danger' id='error-comment-improved'>改善点が入力されていません</p>
           </div>
-          <p class='help is-danger' id='error-comment-good'>良かった点が入力されていません</p>
-        </div>
-        <div id='comment-improved-wrapper' class='field'>
-          <label class='label'>改善点</label>
-          <div class='control'>
-            <textarea type='textarea' id='comment-improved' class='textarea' disabled required></textarea>
+          <button type='button' id='button-next' class='button is-primary' disabled>次へ</button>
+          <progress id='reading-modal' class='progress is-success message-search'></progress>
+        </form>
+        <div id='modal-confirm' class='modal'>
+          <div id='modal-confirm-background' class='modal-background'></div>
+          <div class='modal-card'>
+            <header class='modal-card-head'>
+              <h2 class='modal-card-title'>入力内容の確認</h2>
+              <button id='button-delete-modal-confirm' class='delete' aria-label="close"></button>
+            </header>
+            <section id='modal-card-body' class='modal-card-body'>
+            </section>
+            <footer class='modal-card-foot'>
+              <button id='button-modal-submit' class='button is-success'>提出</button>
+              <button id='button-modal-cancel' class='button'>キャンセル</button>
+              <progress id='reading-modal-end' class='progress is-success' style='visibility: hidden'></progress>
+            </footer>
           </div>
-          <p class='help is-danger' id='error-comment-improved'>改善点が入力されていません</p>
         </div>
-        <button type='button submit' id='button-submit' class='button is-primary' disabled>送信</button>
-      </form>
-    </main>
-    <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>
+        <div id='modal-end' class='modal'>
+          <div id='modal-end-background' class='modal-background'></div>
+          <div class='modal-card'>
+            <header class='modal-card-head'>
+              <h2 class='modal-card-title'>提出完了</h2>
+              <button id='button-delete-modal-end' class='delete' aria-label='close'></button>
+            </header>
+            <section class='modal-card-body'>
+              <p>提出ありがとうございました。入力内容は，授業者にメールで通知されます。また，入力したあなたにも確認のメールが届きます。</p>
+            </section>
+            <footer class='modal-card-foot'>
+              <button id='button-close-modal-end'class='button'>閉じる</button>
+            </footer>
+          </div>
+        </div>
+      </main>
+      <?!=HtmlService.createHtmlOutputFromFile('script').getContent();?>
+    </div>
   </body>
 </html>
